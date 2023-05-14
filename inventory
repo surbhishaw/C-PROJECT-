@@ -1,0 +1,104 @@
+no ka code #include <stdio.h>
+#include <stdlib.h>
+
+struct product {
+  char *name;
+  int id;
+  int quantity;
+  float price;
+};
+
+void add_product(struct product *product) {
+  printf("Enter product name: ");
+  fgets(product->name, 100, stdin);
+  product->name[strlen(product->name) - 1] = '\0';
+
+  printf("Enter product ID: ");
+  scanf("%d", &product->id);
+
+  printf("Enter product quantity: ");
+  scanf("%d", &product->quantity);
+
+  printf("Enter product price: ");
+  scanf("%f", &product->price);
+}
+
+void print_product(struct product product) {
+  printf("Product Name: %s\n", product.name);
+  printf("Product ID: %d\n", product.id);
+  printf("Product Quantity: %d\n", product.quantity);
+  printf("Product Price: %.2f\n", product.price);
+}
+
+void list_products(struct product *products, int num_products) {
+  for (int i = 0; i < num_products; i++) {
+    print_product(products[i]);
+  }
+}
+
+void sell_product(struct product *products, int num_products, int product_id) {
+  for (int i = 0; i < num_products; i++) {
+    if (products[i].id == product_id) {
+      products[i].quantity--;
+      break;
+    }
+  }
+}
+
+void restock_product(struct product *products, int num_products, int product_id, int quantity) {
+  for (int i = 0; i < num_products; i++) {
+    if (products[i].id == product_id) {
+      products[i].quantity += quantity;
+      break;
+    }
+  }
+}
+
+void generate_report(struct product *products, int num_products) {
+  printf("Product Name | Product ID | Product Quantity | Product Price\n");
+  for (int i = 0; i < num_products; i++) {
+    printf("%s | %d | %d | %.2f\n", products[i].name, products[i].id, products[i].quantity, products[i].price);
+  }
+}
+
+int main() {
+  struct product products[100];
+  int num_products = 0;
+
+  while (1) {
+    printf("1. Add Product\n2. List Products\n3. Sell Product\n4. Restock Product\n5. Generate Report\n6. Exit\n");
+    int option;
+    scanf("%d", &option);
+
+    switch (option) {
+      case 1:
+        add_product(&products[num_products++]);
+        break;
+      case 2:
+        list_products(products, num_products);
+        break;
+      case 3:
+        printf("Enter product ID to sell: ");
+        int product_id;
+        scanf("%d", &product_id);
+        sell_product(products, num_products, product_id);
+        break;
+      case 4:
+        printf("Enter product ID to restock: ");
+        int product_id;
+        scanf("%d", &product_id);
+        printf("Enter quantity to restock: ");
+        int quantity;
+        scanf("%d", &quantity);
+        restock_product(products, num_products, product_id, quantity);
+        break;
+      case 5:
+        generate_report(products, num_products);
+        break;
+      case 6:
+        return 0;
+    }
+  }
+
+  return 0;
+}
